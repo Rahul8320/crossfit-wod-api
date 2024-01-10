@@ -57,14 +57,33 @@ const createNewWorkout = (req, res) => {
   });
 };
 
-const updateWorkoutById = (_req, res) => {
-  workoutService.updateWorkoutById();
-  return res.status(200).json({ message: "Update an existing workout" });
+const updateWorkoutById = (req, res) => {
+  const workoutId = req.params.workoutId;
+  const { name, mode, equipment, exercises, trainerTips } = req.body;
+
+  const workout = {
+    name,
+    mode,
+    equipment,
+    exercises,
+    trainerTips,
+  };
+
+  const updatedWorkout = workoutService.updateWorkoutById(workoutId, workout);
+  return res.status(200).json({
+    status: 200,
+    data: updatedWorkout,
+    message: "Workout updated successfully.",
+  });
 };
 
-const deleteWorkoutById = (_req, res) => {
-  workoutService.deleteWorkoutById();
-  return res.status(200).json({ message: "Delete an existing workout" });
+const deleteWorkoutById = (req, res) => {
+  const workoutId = req.params.workoutId;
+
+  workoutService.deleteWorkoutById(workoutId);
+  return res
+    .status(200)
+    .json({ status: 200, data: {}, message: "Workout deleted successfully." });
 };
 
 export default {
