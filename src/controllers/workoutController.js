@@ -32,12 +32,6 @@ const getWorkoutById = (req, res) => {
 const createNewWorkout = (req, res) => {
   const { name, mode, equipment, exercises, trainerTips } = req.body;
 
-  if (!name || !mode || !equipment || !exercises || !trainerTips) {
-    return res
-      .status(400)
-      .json({ status: 400, error: "Required filed cannot be empty." });
-  }
-
   const newWorkout = {
     name,
     mode,

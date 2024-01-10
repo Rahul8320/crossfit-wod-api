@@ -21,8 +21,8 @@ const createNewWorkout = (newWorkout) => {
   }
 
   const workout = {
-    ...newWorkout,
     id: uuid(),
+    ...newWorkout,
     createdAt: new Date().toLocaleString("en-US", { timeZone: "UTC" }),
     updatedAt: new Date().toLocaleString("en-US", { timeZone: "UTC" }),
   };

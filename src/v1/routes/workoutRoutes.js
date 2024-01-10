@@ -1,16 +1,40 @@
 import express from "express";
+import { checkSchema } from "express-validator";
 import workoutController from "../../controllers/workoutController.js";
+import { createWorkoutValidator } from "../../middlewares/validators/createWorkout.validator.js";
+import { validate } from "../../middlewares/validate.js";
+import { workoutIdValidator } from "../../middlewares/validators/workoutId.validator.js";
 
 const router = express.Router();
 
 router.get("/", workoutController.getAllWorkouts);
 
-router.get("/:workoutId", workoutController.getWorkoutById);
+router.get(
+  "/:workoutId",
+  checkSchema(workoutIdValidator),
+  validate,
+  workoutController.getWorkoutById
+);
 
-router.post("/", workoutController.createNewWorkout);
+router.post(
+  "/",
+  checkSchema(createWorkoutValidator),
+  validate,
+  workoutController.createNewWorkout
+);
 
-router.patch("/:workoutId", workoutController.updateWorkoutById);
+router.patch(
+  "/:workoutId",
+  checkSchema(workoutIdValidator),
+  validate,
+  workoutController.updateWorkoutById
+);
 
-router.delete("/:workoutId", workoutController.deleteWorkoutById);
+router.delete(
+  "/:workoutId",
+  checkSchema(workoutIdValidator),
+  validate,
+  workoutController.deleteWorkoutById
+);
 
 export default router;
