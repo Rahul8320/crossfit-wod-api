@@ -25,6 +25,7 @@ router.post(
 
 router.patch(
   "/:workoutId",
+  checkSchema(createWorkoutValidator),
   checkSchema(workoutIdValidator),
   validate,
   workoutController.updateWorkoutById

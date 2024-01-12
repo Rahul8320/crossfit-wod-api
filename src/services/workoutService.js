@@ -31,12 +31,32 @@ const createNewWorkout = (newWorkout) => {
   return createdWorkout;
 };
 
-const updateWorkoutById = () => {
-  return;
+const updateWorkoutById = (workoutId, workout) => {
+  const existingWorkout = getWorkoutById(workoutId);
+
+  if (existingWorkout === null) {
+    return null;
+  }
+
+  existingWorkout.name = workout.name;
+  existingWorkout.mode = workout.mode;
+  existingWorkout.equipment = workout.equipment;
+  existingWorkout.exercises = workout.exercises;
+  existingWorkout.trainerTips = workout.trainerTips;
+
+  const updatedWorkout = Workout.updateWorkout(workoutId, existingWorkout);
+
+  return updatedWorkout;
 };
 
-const deleteWorkoutById = () => {
-  return;
+const deleteWorkoutById = (workoutId) => {
+  const existingWorkout = getWorkoutById(workoutId);
+
+  if (existingWorkout === null) {
+    return null;
+  }
+
+  Workout.removeWorkout(workoutId);
 };
 
 export default {

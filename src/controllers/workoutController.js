@@ -17,7 +17,6 @@ const getWorkoutById = (req, res) => {
   if (workout === null) {
     return res.status(404).json({
       status: 404,
-      data: {},
       message: "Workout not found",
     });
   }
@@ -45,7 +44,6 @@ const createNewWorkout = (req, res) => {
   if (createdWorkout === null) {
     return res.status(409).json({
       status: 409,
-      data: {},
       message: "Workout already exists!",
     });
   }
@@ -70,6 +68,15 @@ const updateWorkoutById = (req, res) => {
   };
 
   const updatedWorkout = workoutService.updateWorkoutById(workoutId, workout);
+
+  // check for null response
+  if (updatedWorkout === null) {
+    return res.status(404).json({
+      status: 404,
+      message: "Workout not found",
+    });
+  }
+
   return res.status(200).json({
     status: 200,
     data: updatedWorkout,
@@ -80,10 +87,15 @@ const updateWorkoutById = (req, res) => {
 const deleteWorkoutById = (req, res) => {
   const workoutId = req.params.workoutId;
 
-  workoutService.deleteWorkoutById(workoutId);
+  const isDeleted = workoutService.deleteWorkoutById(workoutId);
+
+  if (isDeleted === null) {
+    return res.status(404).json({ status: 404, message: "Workout not found!" });
+  }
+
   return res
     .status(200)
-    .json({ status: 200, data: {}, message: "Workout deleted successfully." });
+    .json({ status: 200, message: "Workout deleted successfully." });
 };
 
 export default {
