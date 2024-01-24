@@ -6,8 +6,8 @@ const getAllWorkouts = (req, res) => {
     const allWorkouts = workoutService.getAllWorkouts({
       mode,
       equipment,
-      pageSize: pageSize || 20,
-      pageNum: pageNum || 1,
+      pageSize: Number(pageSize) || 20,
+      pageNum: Number(pageNum) || 1,
     });
 
     return res.status(200).json({

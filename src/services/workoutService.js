@@ -19,7 +19,18 @@ const getAllWorkouts = (filterParams) => {
       );
     }
 
-    return allWorkouts;
+    // calculate the starting index for the workouts.
+    const startingIndex = filterParams.pageSize * (filterParams.pageNum - 1);
+
+    return {
+      total: allWorkouts.length,
+      pageSize: filterParams.pageSize,
+      pageNumber: filterParams.pageNum,
+      workouts: allWorkouts.slice(
+        startingIndex,
+        startingIndex + filterParams.pageSize
+      ),
+    };
   } catch (error) {
     throw error;
   }
