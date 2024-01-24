@@ -33,4 +33,21 @@ const getRecordById = (req, res) => {
   }
 };
 
-export default { getAllRecords, getRecordById };
+const getRecordsForWorkout = (req, res) => {
+  try {
+    const workoutId = req.params.workoutId;
+    const records = recordService.getRecordByWorkoutId(workoutId);
+
+    return res.status(200).json({
+      status: 200,
+      data: records,
+      message: "Records fetch successfully",
+    });
+  } catch (error) {
+    return res
+      .status(error.status || 500)
+      .json({ status: error.status || 500, message: error.message });
+  }
+};
+
+export default { getAllRecords, getRecordById, getRecordsForWorkout };

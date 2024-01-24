@@ -4,6 +4,7 @@ import workoutController from "../../controllers/workoutController.js";
 import { createWorkoutValidator } from "../../middlewares/validators/createWorkout.validator.js";
 import { validate } from "../../middlewares/validate.js";
 import { workoutIdValidator } from "../../middlewares/validators/workoutId.validator.js";
+import recordController from "../../controllers/recordController.js";
 
 const router = express.Router();
 
@@ -14,6 +15,13 @@ router.get(
   checkSchema(workoutIdValidator),
   validate,
   workoutController.getWorkoutById
+);
+
+router.get(
+  "/:workoutId/records",
+  checkSchema(workoutIdValidator),
+  validate,
+  recordController.getRecordsForWorkout
 );
 
 router.post(
