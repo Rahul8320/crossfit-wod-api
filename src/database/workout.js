@@ -2,57 +2,83 @@ import DB from "./db.json" assert { type: "json" };
 import { saveToDatabase } from "./utils.js";
 
 const getAllWorkouts = () => {
-  return DB.workouts;
+  try {
+    return DB.workouts;
+  } catch (error) {
+    throw { status: 500, error: error.message };
+  }
 };
 
 const getWorkoutById = (id) => {
-  return DB.workouts.find((workout) => workout.id === id);
+  try {
+    return DB.workouts.find((workout) => workout.id === id);
+  } catch (error) {
+    throw { status: 500, error: error.message };
+  }
 };
 
 const isWorkoutPresent = (name) => {
-  const isAlreadyExists = DB.workouts.find((workout) => workout.name === name);
+  try {
+    const isAlreadyExists = DB.workouts.find(
+      (workout) => workout.name === name
+    );
 
-  if (isAlreadyExists) {
-    return true;
+    if (isAlreadyExists) {
+      return true;
+    }
+
+    return false;
+  } catch (error) {
+    throw { status: 500, error: error.message };
   }
-
-  return false;
 };
 
 const createNewWorkout = (newWorkout) => {
-  DB.workouts.push(newWorkout);
-  saveToDatabase(DB);
-  return newWorkout;
+  try {
+    DB.workouts.push(newWorkout);
+    saveToDatabase(DB);
+    return newWorkout;
+  } catch (error) {
+    throw { status: 500, error: error.message };
+  }
 };
 
 const updateWorkout = (workoutId, workout) => {
-  const index = DB.workouts.findIndex((item) => item.id === workoutId);
+  try {
+    const index = DB.workouts.findIndex((item) => item.id === workoutId);
 
-  if (index === -1) {
-    return null;
+    if (index === -1) {
+      return null;
+    }
+
+    const updatedWorkout = {
+      ...DB.workouts[index],
+      ...workout,
+      updatedAt: new Date().toLocaleString("en-US", { timeZone: "UTC" }),
+    };
+
+    DB.workouts[index] = updatedWorkout;
+    saveToDatabase(DB);
+
+    return updatedWorkout;
+  } catch (error) {
+    throw { status: 500, error: error.message };
   }
-
-  const updatedWorkout = {
-    ...DB.workouts[index],
-    ...workout,
-    updatedAt: new Date().toLocaleString("en-US", { timeZone: "UTC" }),
-  };
-
-  DB.workouts[index] = updatedWorkout;
-  saveToDatabase(DB);
-
-  return updatedWorkout;
 };
 
 const removeWorkout = (workoutId) => {
-  const index = DB.workouts.findIndex((item) => item.id === workoutId);
+  try {
+    const index = DB.workouts.findIndex((item) => item.id === workoutId);
 
-  if (index === -1) {
-    return null;
+    if (index === -1) {
+      return null;
+    }
+
+    DB.workouts.splice(index, 1);
+    saveToDatabase(DB);
+  } catch (error) {
+    throw { status: 500, error: error.message };
   }
-
-  DB.workouts.splice(index, 1);
-  saveToDatabase(DB);
 };
 
 export default {
