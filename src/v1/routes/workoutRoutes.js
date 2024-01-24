@@ -5,10 +5,16 @@ import { createWorkoutValidator } from "../../middlewares/validators/createWorko
 import { validate } from "../../middlewares/validate.js";
 import { workoutIdValidator } from "../../middlewares/validators/workoutId.validator.js";
 import recordController from "../../controllers/recordController.js";
+import { getAllWorkoutsValidator } from "../../middlewares/validators/getAllWorkout.validator.js";
 
 const router = express.Router();
 
-router.get("/", workoutController.getAllWorkouts);
+router.get(
+  "/",
+  checkSchema(getAllWorkoutsValidator),
+  validate,
+  workoutController.getAllWorkouts
+);
 
 router.get(
   "/:workoutId",
