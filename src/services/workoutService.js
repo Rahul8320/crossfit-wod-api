@@ -7,7 +7,7 @@ const getAllWorkouts = () => {
 
     return allWorkouts;
   } catch (error) {
-    throw { status: error?.status || 500, message: error?.message || error };
+    throw error;
   }
 };
 
@@ -17,7 +17,7 @@ const getWorkoutById = (id) => {
 
     return workout ?? null;
   } catch (error) {
-    throw { status: error?.status || 500, message: error?.message || error };
+    throw error;
   }
 };
 
@@ -39,7 +39,7 @@ const createNewWorkout = (newWorkout) => {
     const createdWorkout = Workout.createNewWorkout(workout);
     return createdWorkout;
   } catch (error) {
-    throw { status: error?.status || 500, message: error?.message || error };
+    throw error;
   }
 };
 
@@ -61,7 +61,7 @@ const updateWorkoutById = (workoutId, workout) => {
 
     return updatedWorkout;
   } catch (error) {
-    throw { status: error?.status || 500, message: error?.message || error };
+    throw error;
   }
 };
 
@@ -75,7 +75,7 @@ const deleteWorkoutById = (workoutId) => {
 
     Workout.removeWorkout(workoutId);
   } catch (error) {
-    throw { status: error?.status || 500, message: error?.message || error };
+    throw error;
   }
 };
 

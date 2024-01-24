@@ -5,7 +5,7 @@ const getAllWorkouts = () => {
   try {
     return DB.workouts;
   } catch (error) {
-    throw { status: error?.status || 500, message: error?.message || error };
+    throw error;
   }
 };
 
@@ -13,7 +13,7 @@ const getWorkoutById = (id) => {
   try {
     return DB.workouts.find((workout) => workout.id === id);
   } catch (error) {
-    throw { status: error?.status || 500, message: error?.message || error };
+    throw error;
   }
 };
 
@@ -29,7 +29,7 @@ const isWorkoutPresent = (name) => {
 
     return false;
   } catch (error) {
-    throw { status: error?.status || 500, message: error?.message || error };
+    throw error;
   }
 };
 
@@ -39,7 +39,7 @@ const createNewWorkout = (newWorkout) => {
     saveToDatabase(DB);
     return newWorkout;
   } catch (error) {
-    throw { status: error?.status || 500, message: error?.message || error };
+    throw error;
   }
 };
 
@@ -62,7 +62,7 @@ const updateWorkout = (workoutId, workout) => {
 
     return updatedWorkout;
   } catch (error) {
-    throw { status: error?.status || 500, message: error?.message || error };
+    throw error;
   }
 };
 
@@ -77,7 +77,7 @@ const removeWorkout = (workoutId) => {
     DB.workouts.splice(index, 1);
     saveToDatabase(DB);
   } catch (error) {
-    throw { status: error?.status || 500, message: error?.message || error };
+    throw error;
   }
 };
 

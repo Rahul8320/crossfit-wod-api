@@ -6,10 +6,7 @@ const getAllRecords = () => {
 
     return allRecords;
   } catch (error) {
-    throw {
-      status: error?.status || 500,
-      message: error?.message || error,
-    };
+    throw error;
   }
 };
 
@@ -18,10 +15,7 @@ const getRecordById = (id) => {
     const workout = Record.getRecordById(id);
     return workout;
   } catch (error) {
-    throw {
-      status: error?.status || 500,
-      message: error?.message || error,
-    };
+    throw error;
   }
 };
 
@@ -30,10 +24,7 @@ const getRecordByWorkoutId = (workoutId) => {
     const record = Record.getRecordForWorkout(workoutId);
     return record;
   } catch (error) {
-    throw {
-      status: error?.status || 500,
-      message: error?.message || error,
-    };
+    throw error;
   }
 };
 

@@ -5,7 +5,7 @@ const getAllRecords = () => {
     // return all records from DB.
     return DB.records;
   } catch (error) {
-    throw { status: error?.status || 500, message: error?.message || error };
+    throw error;
   }
 };
 
@@ -21,7 +21,7 @@ const getRecordById = (id) => {
 
     return record;
   } catch (error) {
-    throw { status: error?.status || 500, message: error?.message || error };
+    throw error;
   }
 };
 
@@ -37,7 +37,7 @@ const getRecordForWorkout = (workoutId) => {
 
     return record;
   } catch (error) {
-    throw { status: error?.status || 500, message: error?.message || error };
+    throw error;
   }
 };
 
