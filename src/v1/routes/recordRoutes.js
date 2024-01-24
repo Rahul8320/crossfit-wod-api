@@ -1,4 +1,5 @@
 import express from "express";
+import apicache from "apicache";
 import { checkSchema } from "express-validator";
 import { validate } from "../../middlewares/validate.js";
 import recordController from "../../controllers/recordController.js";
@@ -6,7 +7,10 @@ import { recordIdValidator } from "../../middlewares/validators/recordId.validat
 
 const router = express.Router();
 
-router.get("/", recordController.getAllRecords);
+// add cache middlewares
+const cache = apicache.middleware;
+
+router.get("/", cache("2 minutes"), recordController.getAllRecords);
 
 router.get(
   "/:recordId",

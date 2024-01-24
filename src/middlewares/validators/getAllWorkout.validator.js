@@ -1,11 +1,10 @@
 export const getAllWorkoutsValidator = {
   mode: {
     in: ["query"],
-    notEmpty: {
-      errorMessage: "Mode cannot be empty",
-    },
     custom: {
       options: (value) => {
+        if (!value) return true;
+
         if (isNumber(value)) {
           throw new Error("Mode cannot be a number!");
         }
@@ -19,11 +18,10 @@ export const getAllWorkoutsValidator = {
   },
   equipment: {
     in: ["query"],
-    notEmpty: {
-      errorMessage: "Equipment cannot be empty",
-    },
     custom: {
       options: (value) => {
+        if (!value) return true;
+
         if (isNumber(value)) {
           throw new Error("Equipment cannot be a number!");
         }

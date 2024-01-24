@@ -1,4 +1,5 @@
 import express from "express";
+import apicache from "apicache";
 import { checkSchema } from "express-validator";
 import workoutController from "../../controllers/workoutController.js";
 import { createWorkoutValidator } from "../../middlewares/validators/createWorkout.validator.js";
@@ -9,10 +10,14 @@ import { getAllWorkoutsValidator } from "../../middlewares/validators/getAllWork
 
 const router = express.Router();
 
+// add cache middlewares
+const cache = apicache.middleware;
+
 router.get(
   "/",
   checkSchema(getAllWorkoutsValidator),
   validate,
+  cache("2 minutes"),
   workoutController.getAllWorkouts
 );
 
