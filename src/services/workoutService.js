@@ -1,9 +1,23 @@
 import { v4 as uuid } from "uuid";
 import Workout from "../database/workout.js";
 
-const getAllWorkouts = () => {
+const getAllWorkouts = (filterParams) => {
   try {
-    const allWorkouts = Workout.getAllWorkouts();
+    // fetch all workouts from the database.
+    let allWorkouts = Workout.getAllWorkouts();
+
+    // apply the filter if it exists
+    if (filterParams.mode) {
+      allWorkouts = allWorkouts.filter((workout) =>
+        workout.mode.toLowerCase().includes(filterParams.mode)
+      );
+    }
+
+    if (filterParams.equipment) {
+      allWorkouts = allWorkouts.filter((workout) =>
+        workout.equipment.includes(filterParams.equipment)
+      );
+    }
 
     return allWorkouts;
   } catch (error) {

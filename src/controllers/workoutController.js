@@ -1,8 +1,14 @@
 import workoutService from "../services/workoutService.js";
 
-const getAllWorkouts = (_req, res) => {
+const getAllWorkouts = (req, res) => {
   try {
-    const allWorkouts = workoutService.getAllWorkouts();
+    const { mode, equipment, pageSize, pageNum } = req.query;
+    const allWorkouts = workoutService.getAllWorkouts({
+      mode,
+      equipment,
+      pageSize: pageSize || 20,
+      pageNum: pageNum || 1,
+    });
 
     return res.status(200).json({
       status: 200,
