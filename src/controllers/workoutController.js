@@ -10,7 +10,9 @@ const getAllWorkouts = (_req, res) => {
       message: "Workouts successfully fetched",
     });
   } catch (error) {
-    return res.status(500).json({ status: 500, message: error.message });
+    return res
+      .status(error.status || 500)
+      .json({ status: error.status || 500, message: error.message });
   }
 };
 
@@ -32,7 +34,9 @@ const getWorkoutById = (req, res) => {
       message: "Workout successfully fetched",
     });
   } catch (error) {
-    return res.status(500).json({ status: 500, message: error.message });
+    return res
+      .status(error.status || 500)
+      .json({ status: error.status || 500, message: error.message });
   }
 };
 
@@ -63,7 +67,9 @@ const createNewWorkout = (req, res) => {
       message: "Workout created successfully!",
     });
   } catch (error) {
-    return res.status(500).json({ status: 500, message: error.message });
+    return res
+      .status(error.status || 500)
+      .json({ status: error.status || 500, message: error.message });
   }
 };
 
@@ -96,7 +102,9 @@ const updateWorkoutById = (req, res) => {
       message: "Workout updated successfully.",
     });
   } catch (error) {
-    return res.status(500).json({ status: 500, message: error.message });
+    return res
+      .status(error.status || 500)
+      .json({ status: error.status || 500, message: error.message });
   }
 };
 
@@ -116,7 +124,9 @@ const deleteWorkoutById = (req, res) => {
       .status(200)
       .json({ status: 200, message: "Workout deleted successfully." });
   } catch (error) {
-    return res.status(500).json({ status: 500, message: error.message });
+    return res
+      .status(error.status || 500)
+      .json({ status: error.status || 500, message: error.message });
   }
 };
 

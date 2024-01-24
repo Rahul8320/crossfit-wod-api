@@ -1,0 +1,44 @@
+import Record from "../database/record.js";
+
+const getAllRecords = () => {
+  try {
+    const allRecords = Record.getAllRecords();
+
+    return allRecords;
+  } catch (error) {
+    throw {
+      status: error?.status || 500,
+      message: error?.message || error,
+    };
+  }
+};
+
+const getRecordById = (id) => {
+  try {
+    const workout = Record.getRecordById(id);
+    return workout;
+  } catch (error) {
+    throw {
+      status: error?.status || 500,
+      message: error?.message || error,
+    };
+  }
+};
+
+const getRecordByWorkoutId = (workoutId) => {
+  try {
+    const record = Record.getRecordForWorkout(workoutId);
+    return record;
+  } catch (error) {
+    throw {
+      status: error?.status || 500,
+      message: error?.message || error,
+    };
+  }
+};
+
+export default {
+  getAllRecords,
+  getRecordById,
+  getRecordByWorkoutId,
+};
