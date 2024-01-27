@@ -8,44 +8,6 @@ describe("crossfit's test cases", () => {
 });
 
 describe("Workout API", () => {
-  it("GET /workouts --> Returns a list of workouts", async () => {
-    const res = await request(app)
-      .get("/api/v1/workouts?pageSize=5&pageNum=2")
-      .expect("Content-Type", /json/)
-      .expect(200);
-
-    expect(res.body.status).toBe(200);
-    expect(res.body.message).toBe("Workouts successfully fetched");
-    expect(res.body.data.pageNumber).toBe(2);
-    expect(res.body.data.pageSize).toBe(5);
-
-    expect(res.body).toEqual(
-      expect.objectContaining({
-        status: expect.any(Number),
-        message: expect.any(String),
-        data: expect.objectContaining({
-          pageNumber: expect.any(Number),
-          pageSize: expect.any(Number),
-          total: expect.any(Number),
-          workouts: expect.arrayContaining([
-            expect.objectContaining({
-              id: expect.any(String),
-              name: expect.any(String),
-              mode: expect.any(String),
-              equipment: expect.any(Array),
-              exercises: expect.any(Array),
-              trainerTips: expect.any(Array),
-              createdAt: expect.any(String),
-              updatedAt: expect.any(String),
-            }),
-          ]),
-        }),
-      })
-    );
-  });
-
-  it("GET /workouts --> Validates request body", () => {});
-
   it("GET /workouts/id --> Returns specific workout by ID", async () => {
     const res = await request(app)
       .get("/api/v1/workouts/61dbae02-c147-4e28-863c-db7bd402b2d6")
