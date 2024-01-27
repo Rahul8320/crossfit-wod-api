@@ -56,6 +56,10 @@ describe("GET All Workouts Route", () => {
     expect(res.body.data.workouts).not.toBeNull();
     expect(res.body.data.workouts.length).toBeGreaterThan(0);
 
+    res.body.data.workouts.forEach((workout) => {
+      expect(workout.mode).toMatch(/AMRAP/);
+    });
+
     expect(res.body).toEqual(
       expect.objectContaining({
         status: 200,
@@ -76,6 +80,120 @@ describe("GET All Workouts Route", () => {
               updatedAt: expect.any(String),
             }),
           ]),
+        }),
+      })
+    );
+  });
+
+  it("GET /workouts --> Returns a list of workouts with specific equipment", async () => {
+    const res = await request(app)
+      .get("/api/v1/workouts?equipment=barbell&pageSize=5&pageNum=1")
+      .expect("Content-Type", /json/)
+      .expect(200);
+
+    expect(res.status).toBe(200);
+    expect(res.body).not.toBeNull();
+
+    expect(res.body.data).not.toBeNull();
+    expect(res.body.data.workouts).not.toBeNull();
+    expect(res.body.data.workouts.length).toBeGreaterThan(0);
+
+    res.body.data.workouts.forEach((workout) => {
+      expect(workout.equipment).toContain("barbell");
+    });
+
+    expect(res.body).toEqual(
+      expect.objectContaining({
+        status: 200,
+        message: "Workouts successfully fetched",
+        data: expect.objectContaining({
+          pageNumber: 1,
+          pageSize: 5,
+          total: expect.any(Number),
+          workouts: expect.arrayContaining([
+            expect.objectContaining({
+              id: expect.any(String),
+              name: expect.any(String),
+              mode: expect.any(String),
+              equipment: expect.any(Array),
+              exercises: expect.any(Array),
+              trainerTips: expect.any(Array),
+              createdAt: expect.any(String),
+              updatedAt: expect.any(String),
+            }),
+          ]),
+        }),
+      })
+    );
+  });
+
+  it("GET /workouts --> Returns a list of workouts with specific mode and equipment", async () => {
+    const res = await request(app)
+      .get("/api/v1/workouts?mode=amrap&equipment=barbell&pageSize=5&pageNum=1")
+      .expect("Content-Type", /json/)
+      .expect(200);
+
+    expect(res.status).toBe(200);
+    expect(res.body).not.toBeNull();
+
+    expect(res.body.data).not.toBeNull();
+    expect(res.body.data.workouts).not.toBeNull();
+    expect(res.body.data.workouts.length).toBeGreaterThan(0);
+
+    res.body.data.workouts.forEach((workout) => {
+      expect(workout.equipment).toContain("barbell");
+      expect(workout.mode).toMatch(/AMRAP/);
+    });
+
+    expect(res.body).toEqual(
+      expect.objectContaining({
+        status: 200,
+        message: "Workouts successfully fetched",
+        data: expect.objectContaining({
+          pageNumber: 1,
+          pageSize: 5,
+          total: expect.any(Number),
+          workouts: expect.arrayContaining([
+            expect.objectContaining({
+              id: expect.any(String),
+              name: expect.any(String),
+              mode: expect.any(String),
+              equipment: expect.any(Array),
+              exercises: expect.any(Array),
+              trainerTips: expect.any(Array),
+              createdAt: expect.any(String),
+              updatedAt: expect.any(String),
+            }),
+          ]),
+        }),
+      })
+    );
+  });
+
+  it("GET /workouts --> Returns no workout with specific mode and equipment", async () => {
+    const res = await request(app)
+      .get(
+        "/api/v1/workouts?mode=amrap10&equipment=barbell11&pageSize=5&pageNum=1"
+      )
+      .expect("Content-Type", /json/)
+      .expect(200);
+
+    expect(res.status).toBe(200);
+    expect(res.body).not.toBeNull();
+
+    expect(res.body.data).not.toBeNull();
+    expect(res.body.data.workouts).not.toBeNull();
+    expect(res.body.data.workouts.length).toBe(0);
+
+    expect(res.body).toEqual(
+      expect.objectContaining({
+        status: 200,
+        message: "Workouts successfully fetched",
+        data: expect.objectContaining({
+          pageNumber: 1,
+          pageSize: 5,
+          total: 0,
+          workouts: [],
         }),
       })
     );
