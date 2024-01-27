@@ -4,14 +4,19 @@ import app from "../src/index.js";
 describe("GET All Workouts Route", () => {
   it("GET /workouts --> Returns a list of workouts", async () => {
     const res = await request(app)
-      .get("/api/v1/workouts?pageSize=5&pageNum=2")
+      .get("/api/v1/workouts?pageSize=5&pageNum=1")
       .expect("Content-Type", /json/)
       .expect(200);
 
     expect(res.body.status).toBe(200);
+    expect(res.body).not.toBeNull();
+
     expect(res.body.message).toBe("Workouts successfully fetched");
-    expect(res.body.data.pageNumber).toBe(2);
+    expect(res.body.data.pageNumber).toBe(1);
     expect(res.body.data.pageSize).toBe(5);
+    expect(res.body.data).not.toBeNull();
+    expect(res.body.data.workouts).not.toBeNull();
+    expect(res.body.data.workouts.length).toBeGreaterThan(0);
 
     expect(res.body).toEqual(
       expect.objectContaining({
@@ -20,6 +25,44 @@ describe("GET All Workouts Route", () => {
         data: expect.objectContaining({
           pageNumber: expect.any(Number),
           pageSize: expect.any(Number),
+          total: expect.any(Number),
+          workouts: expect.arrayContaining([
+            expect.objectContaining({
+              id: expect.any(String),
+              name: expect.any(String),
+              mode: expect.any(String),
+              equipment: expect.any(Array),
+              exercises: expect.any(Array),
+              trainerTips: expect.any(Array),
+              createdAt: expect.any(String),
+              updatedAt: expect.any(String),
+            }),
+          ]),
+        }),
+      })
+    );
+  });
+
+  it("GET /workouts --> Returns a list of workouts with specific mode", async () => {
+    const res = await request(app)
+      .get("/api/v1/workouts?mode=amrap&pageSize=5&pageNum=1")
+      .expect("Content-Type", /json/)
+      .expect(200);
+
+    expect(res.status).toBe(200);
+    expect(res.body).not.toBeNull();
+
+    expect(res.body.data).not.toBeNull();
+    expect(res.body.data.workouts).not.toBeNull();
+    expect(res.body.data.workouts.length).toBeGreaterThan(0);
+
+    expect(res.body).toEqual(
+      expect.objectContaining({
+        status: 200,
+        message: "Workouts successfully fetched",
+        data: expect.objectContaining({
+          pageNumber: 1,
+          pageSize: 5,
           total: expect.any(Number),
           workouts: expect.arrayContaining([
             expect.objectContaining({
@@ -100,6 +143,22 @@ describe("GET All Workouts Route", () => {
     expect(res.body.errors[3].msg).toBe("Page Number must be a number!");
   });
 
+  it("GET /workouts --> Returns 400 for no pageSize param", async () => {
+    const res = await request(app)
+      .get("/api/v1/workouts?pageSize=&pageNum=1")
+      .expect("Content-Type", /json/)
+      .expect(400);
+
+    expect(res.status).toBe(400);
+    expect(res.body.errors.length).toBe(2);
+
+    expect(res.body.errors[0].path).toBe("pageSize");
+    expect(res.body.errors[0].msg).toBe("Page Size cannot be empty");
+
+    expect(res.body.errors[1].path).toBe("pageSize");
+    expect(res.body.errors[1].msg).toBe("Page Size must be a number!");
+  });
+
   it("GET /workouts --> Returns 400 for invalid pageSize param", async () => {
     const res = await request(app)
       .get("/api/v1/workouts?pageSize=true&pageNum=1")
@@ -111,6 +170,22 @@ describe("GET All Workouts Route", () => {
 
     expect(res.body.errors[0].path).toBe("pageSize");
     expect(res.body.errors[0].msg).toBe("Page Size must be a number!");
+  });
+
+  it("GET /workouts --> Returns 400 for no pageNum param", async () => {
+    const res = await request(app)
+      .get("/api/v1/workouts?pageSize=3&pageNum=")
+      .expect("Content-Type", /json/)
+      .expect(400);
+
+    expect(res.status).toBe(400);
+    expect(res.body.errors.length).toBe(2);
+
+    expect(res.body.errors[0].path).toBe("pageNum");
+    expect(res.body.errors[0].msg).toBe("Page Number cannot be empty");
+
+    expect(res.body.errors[1].path).toBe("pageNum");
+    expect(res.body.errors[1].msg).toBe("Page Number must be a number!");
   });
 
   it("GET /workouts --> Returns 400 for invalid pageNum param", async () => {
@@ -126,10 +201,29 @@ describe("GET All Workouts Route", () => {
     expect(res.body.errors[0].msg).toBe("Page Number must be a number!");
   });
 
-  it("GET /workouts --> Validates request body", () => {
-    return request(app)
-      .get("/api/v1/workouts?pageSize=true&pageNum=false&mode=12")
+  it("GET /workouts --> Returns 400 for invalid mode param", async () => {
+    const res = await request(app)
+      .get("/api/v1/workouts?pageSize=3&pageNum=1&mode=123")
       .expect("Content-Type", /json/)
       .expect(400);
+
+    expect(res.status).toBe(400);
+    expect(res.body.errors.length).toBe(1);
+
+    expect(res.body.errors[0].path).toBe("mode");
+    expect(res.body.errors[0].msg).toBe("Mode cannot be a number!");
+  });
+
+  it("GET /workouts --> Returns 400 for invalid equipment param", async () => {
+    const res = await request(app)
+      .get("/api/v1/workouts?pageSize=3&pageNum=1&equipment=123")
+      .expect("Content-Type", /json/)
+      .expect(400);
+
+    expect(res.status).toBe(400);
+    expect(res.body.errors.length).toBe(1);
+
+    expect(res.body.errors[0].path).toBe("equipment");
+    expect(res.body.errors[0].msg).toBe("Equipment cannot be a number!");
   });
 });
